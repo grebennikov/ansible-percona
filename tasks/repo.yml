@@ -5,13 +5,14 @@
   apt_key: url=http://www.percona.com/downloads/RPM-GPG-KEY-percona
           state=present
 
-- name: Adding percona repository
-  apt_repository: repo='deb http://repo.percona.com/apt {{ ansible_distribution_release }} main'
-          state=present
+- name: Download percona apt package
+  get_url:
+    url="https://repo.percona.com/apt/percona-release_0.1-4.{{ ansible_distribution_release }}_all.deb"
+    dest="/tmp/percona-release_0.1-4.{{ ansible_distribution_release }}_all.deb"
 
-- name: Adding percona source repository
-  apt_repository: repo='deb-src http://repo.percona.com/apt {{ ansible_distribution_release }} main'
-          state=present
+- name: Install percona apt package
+  apt: deb="/tmp/percona-release_0.1-4.{{ ansible_distribution_release }}_all.deb"
+  sudo: true
 
 - name: Update apt cache
   apt: update_cache=yes
